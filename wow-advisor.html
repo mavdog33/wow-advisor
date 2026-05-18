@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -7,361 +8,364 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
 
-    :root {
-      --gold: #c8a951;
-      --gold-light: #f0c060;
-      --gold-dark: #8a6a20;
-      --bg: #07060d;
-      --bg2: #0d0b18;
-      --bg3: #120f1f;
-      --border: #2a2040;
-      --border-gold: #3a2a10;
-      --text: #d4c9b0;
-      --text-dim: #7a6a5a;
-      --text-muted: #4a3a2a;
-      --red: #c04040;
-      --green: #4a9a4a;
-      --blue: #4a70c0;
-      --purple: #8a50c0;
-    }
+```
+:root {
+  --gold: #c8a951;
+  --gold-light: #f0c060;
+  --gold-dark: #8a6a20;
+  --bg: #07060d;
+  --bg2: #0d0b18;
+  --bg3: #120f1f;
+  --border: #2a2040;
+  --border-gold: #3a2a10;
+  --text: #d4c9b0;
+  --text-dim: #7a6a5a;
+  --text-muted: #4a3a2a;
+  --red: #c04040;
+  --green: #4a9a4a;
+  --blue: #4a70c0;
+  --purple: #8a50c0;
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Crimson Text', Georgia, serif;
-      font-size: 16px;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 16px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-    /* Animated background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(100,60,200,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,100,30,0.05) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+/* Animated background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(100,60,200,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,100,30,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-    .grain {
-      position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 1;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    }
+.grain {
+  position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
 
-    .container { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; padding: 0 20px 60px; }
+.container { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; padding: 0 20px 60px; }
 
-    /* HEADER */
-    header {
-      text-align: center;
-      padding: 48px 0 36px;
-      border-bottom: 1px solid var(--border-gold);
-      margin-bottom: 40px;
-      position: relative;
-    }
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; left: 50%; transform: translateX(-50%);
-      width: 200px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
+/* HEADER */
+header {
+  text-align: center;
+  padding: 48px 0 36px;
+  border-bottom: 1px solid var(--border-gold);
+  margin-bottom: 40px;
+  position: relative;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
 
-    .header-rune {
-      font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
-      color: var(--gold-dark); margin-bottom: 12px;
-    }
-    h1 {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(24px, 5vw, 38px);
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, var(--gold-light) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: 3px;
-      line-height: 1.2;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      font-size: 14px; color: var(--text-dim); letter-spacing: 1px;
-      font-style: italic;
-    }
+.header-rune {
+  font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
+  color: var(--gold-dark); margin-bottom: 12px;
+}
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(24px, 5vw, 38px);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, var(--gold-light) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: 3px;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-size: 14px; color: var(--text-dim); letter-spacing: 1px;
+  font-style: italic;
+}
 
-    /* STEPS */
-    .step-indicator {
-      display: flex; justify-content: center; gap: 0; margin-bottom: 36px;
-    }
-    .step-dot {
-      display: flex; align-items: center; gap: 0;
-    }
-    .step-dot .dot {
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 2px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Cinzel', serif; font-size: 12px;
-      color: var(--text-muted);
-      transition: all 0.3s;
-      background: var(--bg2);
-    }
-    .step-dot.active .dot {
-      border-color: var(--gold); color: var(--gold);
-      box-shadow: 0 0 16px rgba(200,169,81,0.3);
-    }
-    .step-dot.done .dot {
-      border-color: var(--green); background: var(--green);
-      color: #fff;
-    }
-    .step-line {
-      width: 40px; height: 2px; background: var(--border);
-      margin-top: 15px; transition: background 0.3s;
-    }
-    .step-line.done { background: var(--green); }
-    .step-label {
-      font-size: 9px; text-align: center; margin-top: 6px;
-      color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;
-      max-width: 60px;
-    }
-    .step-dot.active .step-label { color: var(--gold); }
+/* STEPS */
+.step-indicator {
+  display: flex; justify-content: center; gap: 0; margin-bottom: 36px;
+}
+.step-dot {
+  display: flex; align-items: center; gap: 0;
+}
+.step-dot .dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 12px;
+  color: var(--text-muted);
+  transition: all 0.3s;
+  background: var(--bg2);
+}
+.step-dot.active .dot {
+  border-color: var(--gold); color: var(--gold);
+  box-shadow: 0 0 16px rgba(200,169,81,0.3);
+}
+.step-dot.done .dot {
+  border-color: var(--green); background: var(--green);
+  color: #fff;
+}
+.step-line {
+  width: 40px; height: 2px; background: var(--border);
+  margin-top: 15px; transition: background 0.3s;
+}
+.step-line.done { background: var(--green); }
+.step-label {
+  font-size: 9px; text-align: center; margin-top: 6px;
+  color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;
+  max-width: 60px;
+}
+.step-dot.active .step-label { color: var(--gold); }
 
-    /* PANELS */
-    .panel {
-      background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 28px;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .panel::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
-    }
-    .panel-title {
-      font-family: 'Cinzel', serif;
-      font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 20px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .panel-title::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(90deg, var(--border-gold), transparent);
-    }
+/* PANELS */
+.panel {
+  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+}
+.panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-title::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border-gold), transparent);
+}
 
-    /* FORM ELEMENTS */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 14px;
-    }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
+/* FORM ELEMENTS */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
 
-    label {
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--text-dim);
-    }
+label {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+}
 
-    select, input[type="text"], input[type="number"], textarea {
-      background: rgba(0,0,0,0.4);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text);
-      font-family: 'Crimson Text', serif;
-      font-size: 15px;
-      padding: 8px 12px;
-      width: 100%;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-appearance: none;
-    }
-    select:focus, input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--gold-dark);
-      box-shadow: 0 0 0 2px rgba(200,169,81,0.1);
-    }
-    select option { background: #1a1520; }
-    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+select, input[type="text"], input[type="number"], textarea {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'Crimson Text', serif;
+  font-size: 15px;
+  padding: 8px 12px;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--gold-dark);
+  box-shadow: 0 0 0 2px rgba(200,169,81,0.1);
+}
+select option { background: #1a1520; }
+textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
 
-    /* REP GRID */
-    .rep-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
-    }
-    .rep-item { display: flex; flex-direction: column; gap: 5px; }
-    .rep-item label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
-    .rep-select {
-      background: rgba(0,0,0,0.4); border: 1px solid var(--border);
-      border-radius: 4px; color: var(--text);
-      font-family: 'Crimson Text', serif; font-size: 13px;
-      padding: 6px 10px; -webkit-appearance: none;
-    }
+/* REP GRID */
+.rep-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.rep-item { display: flex; flex-direction: column; gap: 5px; }
+.rep-item label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+.rep-select {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+  border-radius: 4px; color: var(--text);
+  font-family: 'Crimson Text', serif; font-size: 13px;
+  padding: 6px 10px; -webkit-appearance: none;
+}
 
-    /* GEAR TABLE */
-    .gear-table { display: grid; gap: 6px; }
-    .gear-row {
-      display: grid; grid-template-columns: 90px 1fr;
-      gap: 10px; align-items: center;
-    }
-    .gear-slot-label {
-      font-size: 10px; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 1px;
-      text-align: right;
-    }
+/* GEAR TABLE */
+.gear-table { display: grid; gap: 6px; }
+.gear-row {
+  display: grid; grid-template-columns: 90px 1fr;
+  gap: 10px; align-items: center;
+}
+.gear-slot-label {
+  font-size: 10px; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 1px;
+  text-align: right;
+}
 
-    /* BUTTONS */
-    .btn {
-      font-family: 'Cinzel', serif;
-      font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
-      padding: 12px 28px;
-      border-radius: 4px; border: none; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #c8a030, #8a6a15);
-      color: #0a0805;
-      box-shadow: 0 4px 20px rgba(200,169,81,0.25);
-    }
-    .btn-primary:hover {
-      box-shadow: 0 6px 28px rgba(200,169,81,0.4);
-      transform: translateY(-1px);
-    }
-    .btn-primary:disabled {
-      opacity: 0.5; cursor: not-allowed; transform: none;
-    }
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-    }
-    .btn-secondary:hover { border-color: var(--gold-dark); color: var(--gold); }
+/* BUTTONS */
+.btn {
+  font-family: 'Cinzel', serif;
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 12px 28px;
+  border-radius: 4px; border: none; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #c8a030, #8a6a15);
+  color: #0a0805;
+  box-shadow: 0 4px 20px rgba(200,169,81,0.25);
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 28px rgba(200,169,81,0.4);
+  transform: translateY(-1px);
+}
+.btn-primary:disabled {
+  opacity: 0.5; cursor: not-allowed; transform: none;
+}
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.btn-secondary:hover { border-color: var(--gold-dark); color: var(--gold); }
 
-    .btn-row {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 24px; flex-wrap: wrap; gap: 12px;
-    }
+.btn-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 24px; flex-wrap: wrap; gap: 12px;
+}
 
-    /* API KEY INPUT */
-    .api-section {
-      background: rgba(200,169,81,0.05);
-      border: 1px solid rgba(200,169,81,0.2);
-      border-radius: 6px; padding: 16px; margin-bottom: 20px;
-    }
-    .api-note { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.5; }
-    .api-note a { color: var(--gold); text-decoration: none; }
+/* API KEY INPUT */
+.api-section {
+  background: rgba(200,169,81,0.05);
+  border: 1px solid rgba(200,169,81,0.2);
+  border-radius: 6px; padding: 16px; margin-bottom: 20px;
+}
+.api-note { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.5; }
+.api-note a { color: var(--gold); text-decoration: none; }
 
-    /* RESULTS */
-    .results-panel {
-      background: linear-gradient(135deg, #0d0b18, #120f1f);
-      border: 1px solid rgba(200,169,81,0.3);
-      border-radius: 8px; padding: 28px;
-      position: relative; overflow: hidden;
-    }
-    .results-panel::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
+/* RESULTS */
+.results-panel {
+  background: linear-gradient(135deg, #0d0b18, #120f1f);
+  border: 1px solid rgba(200,169,81,0.3);
+  border-radius: 8px; padding: 28px;
+  position: relative; overflow: hidden;
+}
+.results-panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
 
-    .result-content {
-      font-size: 15px; line-height: 1.8; color: var(--text);
-      white-space: pre-wrap;
-    }
+.result-content {
+  font-size: 15px; line-height: 1.8; color: var(--text);
+  white-space: pre-wrap;
+}
 
-    /* Streaming cursor */
-    .cursor {
-      display: inline-block; width: 2px; height: 16px;
-      background: var(--gold); margin-left: 2px;
-      animation: blink 1s infinite; vertical-align: middle;
-    }
-    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+/* Streaming cursor */
+.cursor {
+  display: inline-block; width: 2px; height: 16px;
+  background: var(--gold); margin-left: 2px;
+  animation: blink 1s infinite; vertical-align: middle;
+}
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
 
-    /* Loading */
-    .loading-ring {
-      width: 48px; height: 48px; border-radius: 50%;
-      border: 3px solid var(--border);
-      border-top-color: var(--gold);
-      animation: spin 0.8s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+/* Loading */
+.loading-ring {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  animation: spin 0.8s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-    .loading-text {
-      text-align: center; font-style: italic;
-      color: var(--text-dim); font-size: 14px; margin-top: 8px;
-    }
+.loading-text {
+  text-align: center; font-style: italic;
+  color: var(--text-dim); font-size: 14px; margin-top: 8px;
+}
 
-    /* Formatted result sections */
-    .result-section {
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    .result-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .result-heading {
-      font-family: 'Cinzel', serif;
-      font-size: 13px; letter-spacing: 2px; color: var(--gold);
-      text-transform: uppercase; margin-bottom: 12px;
-    }
-    .priority-item {
-      display: flex; gap: 12px; align-items: flex-start;
-      margin-bottom: 8px; font-size: 15px;
-    }
-    .priority-num {
-      font-family: 'Cinzel', serif; font-size: 11px;
-      color: var(--gold-dark); min-width: 22px; padding-top: 2px;
-    }
+/* Formatted result sections */
+.result-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.result-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.result-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; letter-spacing: 2px; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.priority-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-bottom: 8px; font-size: 15px;
+}
+.priority-num {
+  font-family: 'Cinzel', serif; font-size: 11px;
+  color: var(--gold-dark); min-width: 22px; padding-top: 2px;
+}
 
-    /* Character badge */
-    .char-badge {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: rgba(200,169,81,0.08);
-      border: 1px solid rgba(200,169,81,0.2);
-      border-radius: 6px; padding: 10px 16px; margin-bottom: 20px;
-    }
-    .char-badge-name { font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); }
-    .char-badge-sub { font-size: 12px; color: var(--text-dim); }
+/* Character badge */
+.char-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(200,169,81,0.08);
+  border: 1px solid rgba(200,169,81,0.2);
+  border-radius: 6px; padding: 10px 16px; margin-bottom: 20px;
+}
+.char-badge-name { font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); }
+.char-badge-sub { font-size: 12px; color: var(--text-dim); }
 
-    /* Progress bar for steps */
-    .progress-bar {
-      height: 2px; background: var(--border);
-      border-radius: 1px; margin-bottom: 32px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-      border-radius: 1px; transition: width 0.4s ease;
-    }
+/* Progress bar for steps */
+.progress-bar {
+  height: 2px; background: var(--border);
+  border-radius: 1px; margin-bottom: 32px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  border-radius: 1px; transition: width 0.4s ease;
+}
 
-    /* Tooltip */
-    .tooltip { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+/* Tooltip */
+.tooltip { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
 
-    /* Decorative divider */
-    .divider {
-      text-align: center; color: var(--gold-dark);
-      font-size: 18px; margin: 28px 0; letter-spacing: 8px;
-    }
+/* Decorative divider */
+.divider {
+  text-align: center; color: var(--gold-dark);
+  font-size: 18px; margin: 28px 0; letter-spacing: 8px;
+}
 
-    /* New analysis button */
-    .new-btn {
-      display: block; margin: 24px auto 0;
-      background: transparent; border: 1px solid var(--border);
-      color: var(--text-dim); font-family: 'Cinzel', serif;
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      padding: 10px 24px; border-radius: 4px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .new-btn:hover { border-color: var(--gold-dark); color: var(--gold); }
+/* New analysis button */
+.new-btn {
+  display: block; margin: 24px auto 0;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); font-family: 'Cinzel', serif;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 10px 24px; border-radius: 4px; cursor: pointer;
+  transition: all 0.2s;
+}
+.new-btn:hover { border-color: var(--gold-dark); color: var(--gold); }
 
-    @media (max-width: 500px) {
-      .panel { padding: 18px; }
-      .form-grid { grid-template-columns: 1fr; }
-      .gear-row { grid-template-columns: 80px 1fr; }
-      h1 { font-size: 22px; }
-      .step-line { width: 24px; }
-    }
+@media (max-width: 500px) {
+  .panel { padding: 18px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .gear-row { grid-template-columns: 80px 1fr; }
+  h1 { font-size: 22px; }
+  .step-line { width: 24px; }
+}
+```
+
   </style>
 </head>
 <body>
@@ -375,6 +379,7 @@
   </header>
 
   <!-- STEP INDICATOR -->
+
   <div class="step-indicator" id="stepIndicator">
     <div class="step-dot active" id="stepDot1">
       <div class="dot">1</div>
@@ -402,6 +407,7 @@
   </div>
 
   <!-- API KEY -->
+
   <div class="api-section" id="apiSection">
     <div class="form-group">
       <label>Anthropic API Key</label>
@@ -411,6 +417,7 @@
   </div>
 
   <!-- STEP 1: CHARACTER -->
+
   <div id="step1" class="panel">
     <div class="panel-title">Character Info</div>
     <div class="form-grid">
@@ -538,6 +545,7 @@
   </div>
 
   <!-- STEP 2: GEAR -->
+
   <div id="step2" class="panel" style="display:none">
     <div class="panel-title">Current Gear</div>
     <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px; font-style:italic;">Enter your current item in each slot. Leave blank if slot is empty or using vendor gear.</p>
@@ -549,70 +557,87 @@
   </div>
 
   <!-- STEP 3: REP + ATTUNEMENT -->
+
   <div id="step3" class="panel" style="display:none">
     <div class="panel-title">Reputation & Progress</div>
 
-    <div style="font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">Outland Reputations</div>
-    <div class="rep-grid" id="repGrid"></div>
+```
+<div style="font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">Outland Reputations</div>
+<div class="rep-grid" id="repGrid"></div>
 
-    <div class="divider">· · ·</div>
+<div class="divider">· · ·</div>
 
-    <div style="font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">Attunements & Keys</div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Kara Attuned?</label>
-        <select id="attKara">
-          <option value="no">No</option>
-          <option value="in-progress">In Progress</option>
-          <option value="yes">Yes</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Epic Flying Mount?</label>
-        <select id="attFlying">
-          <option value="no">No</option>
-          <option value="normal">Normal Flying Only</option>
-          <option value="yes">Yes — Epic Flying</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Heroic Keys (select all)</label>
-        <select id="attKeys" multiple style="height:100px; font-size:13px;">
-          <option>Flamewrought Key</option>
-          <option>Reservoir Key</option>
-          <option>Auchenai Key</option>
-          <option>Warpforged Key</option>
-          <option>Key of Time</option>
-        </select>
-        <div class="tooltip">Hold Ctrl/Cmd to select multiple</div>
-      </div>
-      <div class="form-group">
-        <label>Current BoJ Count</label>
-        <input type="number" id="bojCount" placeholder="e.g. 12" min="0" />
-      </div>
-    </div>
+<div style="font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">Attunements & Keys</div>
+<div class="form-grid">
+  <div class="form-group">
+    <label>Kara Attuned?</label>
+    <select id="attKara">
+      <option value="no">No</option>
+      <option value="in-progress">In Progress</option>
+      <option value="yes">Yes</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Epic Flying Mount?</label>
+    <select id="attFlying">
+      <option value="no">No</option>
+      <option value="normal">Normal Flying Only</option>
+      <option value="yes">Yes — Epic Flying</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Heroic Keys (select all)</label>
+    <select id="attKeys" multiple style="height:100px; font-size:13px;">
+      <option>Flamewrought Key</option>
+      <option>Reservoir Key</option>
+      <option>Auchenai Key</option>
+      <option>Warpforged Key</option>
+      <option>Key of Time</option>
+    </select>
+    <div class="tooltip">Hold Ctrl/Cmd to select multiple</div>
+  </div>
+  <div class="form-group">
+    <label>Current BoJ Count</label>
+    <input type="number" id="bojCount" placeholder="e.g. 12" min="0" />
+  </div>
+</div>
 
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
-      <button class="btn btn-primary" id="analyzeBtn" onclick="runAnalysis()">⚔ Analyze Character</button>
-    </div>
+<div class="btn-row">
+  <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+  <button class="btn btn-primary" id="analyzeBtn" onclick="runAnalysis()">⚔ Analyze Character</button>
+</div>
+```
+
   </div>
 
   <!-- STEP 4: RESULTS -->
+
   <div id="step4" style="display:none">
     <div id="loadingDiv" style="text-align:center; padding:40px 0; display:none;">
       <div class="loading-ring"></div>
       <p class="loading-text">Consulting the oracle...</p>
     </div>
 
-    <div class="results-panel" id="resultsPanel" style="display:none">
-      <div id="charBadge" class="char-badge"></div>
-      <div id="resultContent" class="result-content"></div>
-    </div>
-
-    <button class="new-btn" onclick="startOver()">↺ Analyze Another Character</button>
+```
+<div id="errorPanel" style="display:none; background:rgba(192,64,64,0.08); border:1px solid rgba(192,64,64,0.3); border-radius:8px; padding:24px; text-align:center; margin-bottom:16px;">
+  <div style="font-size:28px; margin-bottom:12px;">WARNING</div>
+  <div style="font-family:Cinzel,serif; font-size:13px; letter-spacing:2px; color:#c04040; margin-bottom:10px; text-transform:uppercase;">Analysis Failed</div>
+  <div id="errorMessage" style="font-size:14px; color:#9a7a7a; margin-bottom:20px; line-height:1.6; white-space:pre-wrap;"></div>
+  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <button class="btn btn-primary" onclick="retryAnalysis()" style="font-size:11px; padding:10px 20px;">Try Again</button>
+    <button class="btn btn-secondary" onclick="goToStep(3)" style="font-size:11px; padding:10px 20px;">Back to Edit</button>
   </div>
+</div>
 
+<div class="results-panel" id="resultsPanel" style="display:none">
+  <div id="charBadge" class="char-badge"></div>
+  <div id="resultContent" class="result-content"></div>
+</div>
+
+<button class="new-btn" id="newCharBtn" onclick="startOver()" style="display:none">Analyze Another Character</button>
+```
+
+  </div>
 </div>
 
 <script>
@@ -799,6 +824,7 @@ A class/spec-specific tip, utility item, or optimization that most players overl
 Be direct, specific, and practical. Use exact item names. Avoid generic advice. Tailor everything to their exact spec, race, faction, and current progress.`;
 }
 
+
 async function runAnalysis() {
   const apiKey = document.getElementById('apiKey').value.trim();
   if (!apiKey || !apiKey.startsWith('sk-ant-')) {
@@ -811,14 +837,13 @@ async function runAnalysis() {
 
   document.getElementById('loadingDiv').style.display = 'block';
   document.getElementById('resultsPanel').style.display = 'none';
+  document.getElementById('errorPanel').style.display = 'none';
+  document.getElementById('newCharBtn').style.display = 'none';
 
   // Set character badge
-  document.getElementById('charBadge').innerHTML = `
-    <div>
-      <div class="char-badge-name">${data.name}</div>
-      <div class="char-badge-sub">Level ${data.level} ${data.race} ${data.spec} ${data.charClass} · ${data.faction}</div>
-    </div>
-  `;
+  document.getElementById('charBadge').innerHTML =
+    '<div><div class="char-badge-name">' + data.name + '</div>' +
+    '<div class="char-badge-sub">Level ' + data.level + ' ' + data.race + ' ' + data.spec + ' ' + data.charClass + ' · ' + data.faction + '</div></div>';
 
   const resultDiv = document.getElementById('resultContent');
   resultDiv.textContent = '';
@@ -834,7 +859,7 @@ async function runAnalysis() {
         'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 2000,
         stream: true,
         messages: [{ role: 'user', content: buildPrompt(data) }]
@@ -848,8 +873,8 @@ async function runAnalysis() {
 
     document.getElementById('loadingDiv').style.display = 'none';
     document.getElementById('resultsPanel').style.display = 'block';
+    document.getElementById('newCharBtn').style.display = 'block';
 
-    // Add streaming cursor
     const cursor = document.createElement('span');
     cursor.className = 'cursor';
     resultDiv.appendChild(cursor);
@@ -866,11 +891,11 @@ async function runAnalysis() {
 
       for (const line of lines) {
         if (line.startsWith('data: ')) {
-          const data = line.slice(6);
-          if (data === '[DONE]') continue;
+          const d = line.slice(6);
+          if (d === '[DONE]') continue;
           try {
-            const parsed = JSON.parse(data);
-            if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+            const parsed = JSON.parse(d);
+            if (parsed.type === 'content_block_delta' && parsed.delta && parsed.delta.text) {
               streamingText += parsed.delta.text;
               resultDiv.textContent = streamingText;
               resultDiv.appendChild(cursor);
@@ -885,17 +910,43 @@ async function runAnalysis() {
 
   } catch (err) {
     document.getElementById('loadingDiv').style.display = 'none';
-    document.getElementById('resultsPanel').style.display = 'block';
-    resultDiv.textContent = `Error: ${err.message}\n\nMake sure your API key is correct and you have credits available.`;
+    document.getElementById('resultsPanel').style.display = 'none';
+    document.getElementById('errorPanel').style.display = 'block';
+    document.getElementById('newCharBtn').style.display = 'none';
+    document.getElementById('errorMessage').textContent =
+      err.message + '\n\nMake sure your API key is correct and has credits at console.anthropic.com';
   }
 }
 
+function retryAnalysis() {
+  document.getElementById('errorPanel').style.display = 'none';
+  runAnalysis();
+}
+
 function startOver() {
-  goToStep(1);
-  document.getElementById('step4').style.display = 'none';
-  document.getElementById('step1').style.display = 'block';
+  document.getElementById('charName').value = '';
+  document.getElementById('charLevel').value = '70';
+  document.getElementById('charClass').value = '';
+  document.getElementById('charSpec').value = '';
+  document.getElementById('charRace').value = '';
+  document.getElementById('charFaction').value = 'Alliance';
+  document.getElementById('charPhase').value = 'p2';
+  document.getElementById('charGold').value = '';
+  document.getElementById('prof1').value = '';
+  document.getElementById('prof2').value = '';
+  document.getElementById('charNotes').value = '';
+  document.getElementById('bojCount').value = '';
+  document.getElementById('attKara').value = 'no';
+  document.getElementById('attFlying').value = 'no';
   document.getElementById('resultContent').textContent = '';
+  document.getElementById('errorPanel').style.display = 'none';
+  document.getElementById('resultsPanel').style.display = 'none';
+  document.getElementById('newCharBtn').style.display = 'none';
+  buildGearTable();
+  buildRepGrid();
+  goToStep(1);
 }
 </script>
+
 </body>
 </html>
