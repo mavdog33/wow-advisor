@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -213,7 +212,6 @@
   </div>
 
   <!-- STEP 1 -->
-
   <div id="step1" class="panel">
     <div class="panel-title">Character Info</div>
     <div class="form-grid">
@@ -306,7 +304,6 @@
   </div>
 
   <!-- STEP 2 -->
-
   <div id="step2" class="panel" style="display:none">
     <div class="panel-title">Current Gear</div>
     <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;font-style:italic;">Enter your current item in each slot. Leave blank if empty.</p>
@@ -318,7 +315,6 @@
   </div>
 
   <!-- STEP 3 -->
-
   <div id="step3" class="panel" style="display:none">
     <div class="panel-title">Reputation &amp; Progress</div>
     <div style="font-size:11px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Outland Reputations</div>
@@ -364,7 +360,6 @@
   </div>
 
   <!-- STEP 4 -->
-
   <div id="step4" style="display:none">
     <div id="loadingWrap" class="loading-wrap" style="display:none">
       <div class="loading-ring"></div>
@@ -403,204 +398,203 @@ var streamingText = "";
 var lastData = null;
 
 function buildGearTable() {
-var t = document.getElementById(‘gearTable’); t.innerHTML = ‘’;
-GEAR_SLOTS.forEach(function(s) {
-var row = document.createElement(‘div’); row.className = ‘gear-row’;
-var lbl = document.createElement(‘div’); lbl.className = ‘gear-slot-label’; lbl.textContent = s;
-var inp = document.createElement(‘input’); inp.type = ‘text’; inp.className = ‘gear-input’;
-inp.dataset.slot = s; inp.placeholder = ‘Item name or leave blank’;
-row.appendChild(lbl); row.appendChild(inp); t.appendChild(row);
-});
+  var t = document.getElementById('gearTable'); t.innerHTML = '';
+  GEAR_SLOTS.forEach(function(s) {
+    var row = document.createElement('div'); row.className = 'gear-row';
+    var lbl = document.createElement('div'); lbl.className = 'gear-slot-label'; lbl.textContent = s;
+    var inp = document.createElement('input'); inp.type = 'text'; inp.className = 'gear-input';
+    inp.dataset.slot = s; inp.placeholder = 'Item name or leave blank';
+    row.appendChild(lbl); row.appendChild(inp); t.appendChild(row);
+  });
 }
 
 function buildRepGrid() {
-var g = document.getElementById(‘repGrid’); g.innerHTML = ‘’;
-REPS.forEach(function(r) {
-var item = document.createElement(‘div’); item.className = ‘rep-item’;
-var lbl = document.createElement(‘label’); lbl.textContent = r;
-var sel = document.createElement(‘select’); sel.className = ‘rep-select’; sel.dataset.rep = r;
-REP_STANDINGS.forEach(function(s) {
-var o = document.createElement(‘option’); o.value = s; o.textContent = s;
-if (s === ‘Friendly’) o.selected = true; sel.appendChild(o);
-});
-item.appendChild(lbl); item.appendChild(sel); g.appendChild(item);
-});
+  var g = document.getElementById('repGrid'); g.innerHTML = '';
+  REPS.forEach(function(r) {
+    var item = document.createElement('div'); item.className = 'rep-item';
+    var lbl = document.createElement('label'); lbl.textContent = r;
+    var sel = document.createElement('select'); sel.className = 'rep-select'; sel.dataset.rep = r;
+    REP_STANDINGS.forEach(function(s) {
+      var o = document.createElement('option'); o.value = s; o.textContent = s;
+      if (s === 'Friendly') o.selected = true; sel.appendChild(o);
+    });
+    item.appendChild(lbl); item.appendChild(sel); g.appendChild(item);
+  });
 }
 
 buildGearTable(); buildRepGrid();
 
 function setStep(step) {
-for (var s = 1; s <= 4; s++) {
-var sn = document.getElementById(‘sn’ + s);
-var sl = document.getElementById(‘sl’ + s);
-if (!sn) continue;
-if (s < step) {
-sn.style.borderColor = ‘#4a9a4a’; sn.style.background = ‘#4a9a4a’; sn.style.color = ‘#fff’; sn.style.boxShadow = ‘none’;
-sl.style.color = ‘#4a9a4a’;
-} else if (s === step) {
-sn.style.borderColor = ‘#c8a951’; sn.style.background = ‘#0d0b18’; sn.style.color = ‘#c8a951’; sn.style.boxShadow = ‘0 0 16px rgba(200,169,81,0.3)’;
-sl.style.color = ‘#c8a951’;
-} else {
-sn.style.borderColor = ‘#2a2040’; sn.style.background = ‘#0d0b18’; sn.style.color = ‘#4a3a2a’; sn.style.boxShadow = ‘none’;
-sl.style.color = ‘#4a3a2a’;
-}
-if (s < 4) {
-var line = document.getElementById(‘sl’ + s + ‘l’);
-if (line) line.style.background = s < step ? ‘#4a9a4a’ : ‘#2a2040’;
-}
-}
-document.getElementById(‘progressFill’).style.width = (((step - 1) / 3) * 100) + ‘%’;
+  for (var s = 1; s <= 4; s++) {
+    var sn = document.getElementById('sn' + s);
+    var sl = document.getElementById('sl' + s);
+    if (!sn) continue;
+    if (s < step) {
+      sn.style.borderColor = '#4a9a4a'; sn.style.background = '#4a9a4a'; sn.style.color = '#fff'; sn.style.boxShadow = 'none';
+      sl.style.color = '#4a9a4a';
+    } else if (s === step) {
+      sn.style.borderColor = '#c8a951'; sn.style.background = '#0d0b18'; sn.style.color = '#c8a951'; sn.style.boxShadow = '0 0 16px rgba(200,169,81,0.3)';
+      sl.style.color = '#c8a951';
+    } else {
+      sn.style.borderColor = '#2a2040'; sn.style.background = '#0d0b18'; sn.style.color = '#4a3a2a'; sn.style.boxShadow = 'none';
+      sl.style.color = '#4a3a2a';
+    }
+    if (s < 4) {
+      var line = document.getElementById('sl' + s + 'l');
+      if (line) line.style.background = s < step ? '#4a9a4a' : '#2a2040';
+    }
+  }
+  document.getElementById('progressFill').style.width = (((step - 1) / 3) * 100) + '%';
 }
 
 function goToStep(step) {
-if (step > 1 && !document.getElementById(‘charClass’).value) {
-alert(‘Please select your class before continuing.’); return;
-}
-for (var s = 1; s <= 3; s++) {
-var el = document.getElementById(‘step’ + s);
-if (el) el.style.display = (s === step) ? ‘block’ : ‘none’;
-}
-document.getElementById(‘step4’).style.display = step === 4 ? ‘block’ : ‘none’;
-setStep(step);
-window.scrollTo({ top: 0, behavior: ‘smooth’ });
+  if (step > 1 && !document.getElementById('charClass').value) {
+    alert('Please select your class before continuing.'); return;
+  }
+  for (var s = 1; s <= 3; s++) {
+    var el = document.getElementById('step' + s);
+    if (el) el.style.display = (s === step) ? 'block' : 'none';
+  }
+  document.getElementById('step4').style.display = step === 4 ? 'block' : 'none';
+  setStep(step);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function collectData() {
-var gear = {};
-document.querySelectorAll(’.gear-input’).forEach(function(el) {
-if (el.value.trim()) gear[el.dataset.slot] = el.value.trim();
-});
-var reps = {};
-document.querySelectorAll(’.rep-select’).forEach(function(el) { reps[el.dataset.rep] = el.value; });
-var keys = Array.from(document.getElementById(‘attKeys’).selectedOptions).map(function(o) { return o.value; });
-return {
-name: document.getElementById(‘charName’).value || ‘Unknown’,
-level: document.getElementById(‘charLevel’).value,
-charClass: document.getElementById(‘charClass’).value,
-spec: document.getElementById(‘charSpec’).value,
-race: document.getElementById(‘charRace’).value,
-faction: document.getElementById(‘charFaction’).value,
-phase: document.getElementById(‘charPhase’).value,
-gold: document.getElementById(‘charGold’).value,
-prof1: document.getElementById(‘prof1’).value,
-prof2: document.getElementById(‘prof2’).value,
-notes: document.getElementById(‘charNotes’).value,
-gear: gear, reps: reps,
-attunements: {
-kara: document.getElementById(‘attKara’).value,
-flying: document.getElementById(‘attFlying’).value,
-keys: keys, boj: document.getElementById(‘bojCount’).value || ‘0’
-}
-};
+  var gear = {};
+  document.querySelectorAll('.gear-input').forEach(function(el) {
+    if (el.value.trim()) gear[el.dataset.slot] = el.value.trim();
+  });
+  var reps = {};
+  document.querySelectorAll('.rep-select').forEach(function(el) { reps[el.dataset.rep] = el.value; });
+  var keys = Array.from(document.getElementById('attKeys').selectedOptions).map(function(o) { return o.value; });
+  return {
+    name: document.getElementById('charName').value || 'Unknown',
+    level: document.getElementById('charLevel').value,
+    charClass: document.getElementById('charClass').value,
+    spec: document.getElementById('charSpec').value,
+    race: document.getElementById('charRace').value,
+    faction: document.getElementById('charFaction').value,
+    phase: document.getElementById('charPhase').value,
+    gold: document.getElementById('charGold').value,
+    prof1: document.getElementById('prof1').value,
+    prof2: document.getElementById('prof2').value,
+    notes: document.getElementById('charNotes').value,
+    gear: gear, reps: reps,
+    attunements: {
+      kara: document.getElementById('attKara').value,
+      flying: document.getElementById('attFlying').value,
+      keys: keys, boj: document.getElementById('bojCount').value || '0'
+    }
+  };
 }
 
 function buildPrompt(d) {
-var gearStr = Object.keys(d.gear).length > 0
-? Object.keys(d.gear).map(function(s) { return ’  ’ + s + ‘: ’ + d.gear[s]; }).join(’\n’)
-: ’  (No gear provided)’;
-var repStr = Object.keys(d.reps).map(function(r) { return ’  ’ + r + ‘: ’ + d.reps[r]; }).join(’\n’);
-return ‘You are an expert World of Warcraft: The Burning Crusade Classic advisor. Analyze this character and provide specific, actionable recommendations.\n\n’ +
-’CHARACTER:\n- Name: ’ + d.name + ’\n- Level ’ + d.level + ’ ’ + d.race + ’ ’ + d.spec + ’ ’ + d.charClass + ‘\n’ +
-’- Faction: ’ + d.faction + ’\n- Phase: ’ + d.phase + ’\n- Gold: ’ + (d.gold || ‘unknown’) + ‘g\n’ +
-’- Profession 1: ’ + (d.prof1 || ‘unknown’) + ’\n- Profession 2: ’ + (d.prof2 || ‘unknown’) + ‘\n’ +
-’- Notes: ’ + (d.notes || ‘none’) + ‘\n\nCURRENT GEAR:\n’ + gearStr + ‘\n\nREPUTATION STANDINGS:\n’ + repStr + ‘\n\n’ +
-’ATTUNEMENTS & KEYS:\n- Kara Attuned: ’ + d.attunements.kara + ’\n- Epic Flying: ’ + d.attunements.flying + ‘\n’ +
-‘- Heroic Keys: ’ + (d.attunements.keys.length > 0 ? d.attunements.keys.join(’, ’) : ‘none’) + ‘\n’ +
-’- Badges of Justice: ’ + d.attunements.boj + ‘\n\n’ +
-‘Please provide a detailed analysis with these sections:\n\n’ +
-‘1. CHARACTER ASSESSMENT\nBrief overview of where this character stands, what content they can access, and their biggest strengths/weaknesses.\n\n’ +
-‘2. IMMEDIATE PRIORITIES (Top 5)\nThe 5 most impactful things they should do RIGHT NOW. Numbered, specific, considers their gold/attunements/keys/phase.\n\n’ +
-‘3. GEAR UPGRADE PATH\nSlot-by-slot analysis of most important upgrades. Highest-impact slots first. Exact item names and sources. Flag set bonuses.\n\n’ +
-‘4. REPUTATION ROADMAP\nWhich reps to prioritize and why, based on class/spec and current standings.\n\n’ +
-‘5. THIS WEEK'S SESSION PLAN\nPractical 2-3 session plan for this week. Specific dungeons, quests, or activities per session.\n\n’ +
-‘6. ONE THING MOST PLAYERS MISS\nA class/spec-specific tip, utility item, or optimization most players overlook.\n\n’ +
-‘Be direct, specific, practical. Use exact item names. No generic advice. Tailor everything to their exact spec, race, faction, and progress.’;
+  var gearStr = Object.keys(d.gear).length > 0
+    ? Object.keys(d.gear).map(function(s) { return '  ' + s + ': ' + d.gear[s]; }).join('\n')
+    : '  (No gear provided)';
+  var repStr = Object.keys(d.reps).map(function(r) { return '  ' + r + ': ' + d.reps[r]; }).join('\n');
+  return 'You are an expert World of Warcraft: The Burning Crusade Classic advisor. Analyze this character and provide specific, actionable recommendations.\n\n' +
+    'CHARACTER:\n- Name: ' + d.name + '\n- Level ' + d.level + ' ' + d.race + ' ' + d.spec + ' ' + d.charClass + '\n' +
+    '- Faction: ' + d.faction + '\n- Phase: ' + d.phase + '\n- Gold: ' + (d.gold || 'unknown') + 'g\n' +
+    '- Profession 1: ' + (d.prof1 || 'unknown') + '\n- Profession 2: ' + (d.prof2 || 'unknown') + '\n' +
+    '- Notes: ' + (d.notes || 'none') + '\n\nCURRENT GEAR:\n' + gearStr + '\n\nREPUTATION STANDINGS:\n' + repStr + '\n\n' +
+    'ATTUNEMENTS & KEYS:\n- Kara Attuned: ' + d.attunements.kara + '\n- Epic Flying: ' + d.attunements.flying + '\n' +
+    '- Heroic Keys: ' + (d.attunements.keys.length > 0 ? d.attunements.keys.join(', ') : 'none') + '\n' +
+    '- Badges of Justice: ' + d.attunements.boj + '\n\n' +
+    'Please provide a detailed analysis with these sections:\n\n' +
+    '1. CHARACTER ASSESSMENT\nBrief overview of where this character stands, what content they can access, and their biggest strengths/weaknesses.\n\n' +
+    '2. IMMEDIATE PRIORITIES (Top 5)\nThe 5 most impactful things they should do RIGHT NOW. Numbered, specific, considers their gold/attunements/keys/phase.\n\n' +
+    '3. GEAR UPGRADE PATH\nSlot-by-slot analysis of most important upgrades. Highest-impact slots first. Exact item names and sources. Flag set bonuses.\n\n' +
+    '4. REPUTATION ROADMAP\nWhich reps to prioritize and why, based on class/spec and current standings.\n\n' +
+    '5. THIS WEEK\'S SESSION PLAN\nPractical 2-3 session plan for this week. Specific dungeons, quests, or activities per session.\n\n' +
+    '6. ONE THING MOST PLAYERS MISS\nA class/spec-specific tip, utility item, or optimization most players overlook.\n\n' +
+    'Be direct, specific, practical. Use exact item names. No generic advice. Tailor everything to their exact spec, race, faction, and progress.';
 }
 
 async function runAnalysis() {
-var apiKey = document.getElementById(‘apiKey’).value.trim();
-if (!apiKey || !apiKey.startsWith(‘sk-ant-’)) {
-alert(‘Please enter a valid Anthropic API key (starts with sk-ant-)’); return;
-}
-lastData = collectData();
-goToStep(4);
-document.getElementById(‘loadingWrap’).style.display = ‘block’;
-document.getElementById(‘resultsPanel’).style.display = ‘none’;
-document.getElementById(‘errorBox’).style.display = ‘none’;
-document.getElementById(‘newCharBtn’).style.display = ‘none’;
-document.getElementById(‘charBadge’).innerHTML =
-‘<div><div class="char-badge-name">’ + lastData.name + ‘</div>’ +
-‘<div class="char-badge-sub">Level ’ + lastData.level + ’ ’ + lastData.race + ’ ’ + lastData.spec + ’ ’ + lastData.charClass + ’ · ’ + lastData.faction + ‘</div></div>’;
-var resultDiv = document.getElementById(‘resultContent’);
-resultDiv.textContent = ‘’; streamingText = ‘’;
-try {
-var resp = await fetch(‘https://api.anthropic.com/v1/messages’, {
-method: ‘POST’,
-headers: {
-‘Content-Type’: ‘application/json’,
-‘x-api-key’: apiKey,
-‘anthropic-version’: ‘2023-06-01’,
-‘anthropic-dangerous-direct-browser-access’: ‘true’
-},
-body: JSON.stringify({
-model: ‘claude-haiku-4-5-20251001’,
-max_tokens: 2000, stream: true,
-messages: [{ role: ‘user’, content: buildPrompt(lastData) }]
-})
-});
-if (!resp.ok) { var e = await resp.json(); throw new Error(e.error && e.error.message ? e.error.message : ‘API request failed’); }
-document.getElementById(‘loadingWrap’).style.display = ‘none’;
-document.getElementById(‘resultsPanel’).style.display = ‘block’;
-document.getElementById(‘newCharBtn’).style.display = ‘block’;
-var cursor = document.createElement(‘span’); cursor.className = ‘cursor’; resultDiv.appendChild(cursor);
-var reader = resp.body.getReader(); var decoder = new TextDecoder();
-while (true) {
-var res = await reader.read(); if (res.done) break;
-var lines = decoder.decode(res.value).split(’\n’);
-for (var i = 0; i < lines.length; i++) {
-if (!lines[i].startsWith(’data: ’)) continue;
-var d = lines[i].slice(6); if (d === ‘[DONE]’) continue;
-try {
-var p = JSON.parse(d);
-if (p.type === ‘content_block_delta’ && p.delta && p.delta.text) {
-streamingText += p.delta.text;
-resultDiv.textContent = streamingText; resultDiv.appendChild(cursor);
-resultDiv.scrollIntoView({ behavior: ‘smooth’, block: ‘end’ });
-}
-} catch(ex) {}
-}
-}
-cursor.remove();
-} catch(err) {
-document.getElementById(‘loadingWrap’).style.display = ‘none’;
-document.getElementById(‘resultsPanel’).style.display = ‘none’;
-document.getElementById(‘errorBox’).style.display = ‘block’;
-document.getElementById(‘newCharBtn’).style.display = ‘none’;
-document.getElementById(‘errorMsg’).textContent = err.message + ‘\n\nCheck your API key and credits at console.anthropic.com’;
-}
+  var apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey || !apiKey.startsWith('sk-ant-')) {
+    alert('Please enter a valid Anthropic API key (starts with sk-ant-)'); return;
+  }
+  lastData = collectData();
+  goToStep(4);
+  document.getElementById('loadingWrap').style.display = 'block';
+  document.getElementById('resultsPanel').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('newCharBtn').style.display = 'none';
+  document.getElementById('charBadge').innerHTML =
+    '<div><div class="char-badge-name">' + lastData.name + '</div>' +
+    '<div class="char-badge-sub">Level ' + lastData.level + ' ' + lastData.race + ' ' + lastData.spec + ' ' + lastData.charClass + ' &middot; ' + lastData.faction + '</div></div>';
+  var resultDiv = document.getElementById('resultContent');
+  resultDiv.textContent = ''; streamingText = '';
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 2000, stream: true,
+        messages: [{ role: 'user', content: buildPrompt(lastData) }]
+      })
+    });
+    if (!resp.ok) { var e = await resp.json(); throw new Error(e.error && e.error.message ? e.error.message : 'API request failed'); }
+    document.getElementById('loadingWrap').style.display = 'none';
+    document.getElementById('resultsPanel').style.display = 'block';
+    document.getElementById('newCharBtn').style.display = 'block';
+    var cursor = document.createElement('span'); cursor.className = 'cursor'; resultDiv.appendChild(cursor);
+    var reader = resp.body.getReader(); var decoder = new TextDecoder();
+    while (true) {
+      var res = await reader.read(); if (res.done) break;
+      var lines = decoder.decode(res.value).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        if (!lines[i].startsWith('data: ')) continue;
+        var d = lines[i].slice(6); if (d === '[DONE]') continue;
+        try {
+          var p = JSON.parse(d);
+          if (p.type === 'content_block_delta' && p.delta && p.delta.text) {
+            streamingText += p.delta.text;
+            resultDiv.textContent = streamingText; resultDiv.appendChild(cursor);
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }
+        } catch(ex) {}
+      }
+    }
+    cursor.remove();
+  } catch(err) {
+    document.getElementById('loadingWrap').style.display = 'none';
+    document.getElementById('resultsPanel').style.display = 'none';
+    document.getElementById('errorBox').style.display = 'block';
+    document.getElementById('newCharBtn').style.display = 'none';
+    document.getElementById('errorMsg').textContent = err.message + '\n\nCheck your API key and credits at console.anthropic.com';
+  }
 }
 
-function retryAnalysis() { document.getElementById(‘errorBox’).style.display = ‘none’; runAnalysis(); }
+function retryAnalysis() { document.getElementById('errorBox').style.display = 'none'; runAnalysis(); }
 
 function startOver() {
-[‘charName’,‘charGold’,‘prof1’,‘prof2’,‘charNotes’,‘bojCount’].forEach(function(id) {
-var el = document.getElementById(id); if (el) el.value = ‘’;
-});
-document.getElementById(‘charLevel’).value = ‘70’;
-document.getElementById(‘charClass’).value = ‘’;
-document.getElementById(‘charSpec’).value = ‘’;
-document.getElementById(‘charRace’).value = ‘’;
-document.getElementById(‘charFaction’).value = ‘Alliance’;
-document.getElementById(‘charPhase’).value = ‘p2’;
-document.getElementById(‘attKara’).value = ‘no’;
-document.getElementById(‘attFlying’).value = ‘no’;
-document.getElementById(‘resultContent’).textContent = ‘’;
-document.getElementById(‘errorBox’).style.display = ‘none’;
-document.getElementById(‘resultsPanel’).style.display = ‘none’;
-document.getElementById(‘newCharBtn’).style.display = ‘none’;
-buildGearTable(); buildRepGrid(); goToStep(1);
+  ['charName','charGold','prof1','prof2','charNotes','bojCount'].forEach(function(id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('charLevel').value = '70';
+  document.getElementById('charClass').value = '';
+  document.getElementById('charSpec').value = '';
+  document.getElementById('charRace').value = '';
+  document.getElementById('charFaction').value = 'Alliance';
+  document.getElementById('charPhase').value = 'p2';
+  document.getElementById('attKara').value = 'no';
+  document.getElementById('attFlying').value = 'no';
+  document.getElementById('resultContent').textContent = '';
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('resultsPanel').style.display = 'none';
+  document.getElementById('newCharBtn').style.display = 'none';
+  buildGearTable(); buildRepGrid(); goToStep(1);
 }
 </script>
-
 </body>
 </html>
