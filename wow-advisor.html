@@ -7,408 +7,204 @@
   <title>TBC Classic — Character Advisor</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
-
-```
-:root {
-  --gold: #c8a951;
-  --gold-light: #f0c060;
-  --gold-dark: #8a6a20;
-  --bg: #07060d;
-  --bg2: #0d0b18;
-  --bg3: #120f1f;
-  --border: #2a2040;
-  --border-gold: #3a2a10;
-  --text: #d4c9b0;
-  --text-dim: #7a6a5a;
-  --text-muted: #4a3a2a;
-  --red: #c04040;
-  --green: #4a9a4a;
-  --blue: #4a70c0;
-  --purple: #8a50c0;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Crimson Text', Georgia, serif;
-  font-size: 16px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Animated background */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(100,60,200,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,100,30,0.05) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.grain {
-  position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 1;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-}
-
-.container { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; padding: 0 20px 60px; }
-
-/* HEADER */
-header {
-  text-align: center;
-  padding: 48px 0 36px;
-  border-bottom: 1px solid var(--border-gold);
-  margin-bottom: 40px;
-  position: relative;
-}
-header::after {
-  content: '';
-  position: absolute;
-  bottom: -1px; left: 50%; transform: translateX(-50%);
-  width: 200px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-}
-
-.header-rune {
-  font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
-  color: var(--gold-dark); margin-bottom: 12px;
-}
-h1 {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(24px, 5vw, 38px);
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, var(--gold-light) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  letter-spacing: 3px;
-  line-height: 1.2;
-  margin-bottom: 10px;
-}
-.subtitle {
-  font-size: 14px; color: var(--text-dim); letter-spacing: 1px;
-  font-style: italic;
-}
-
-/* STEPS */
-.step-indicator {
-  display: flex; justify-content: center; gap: 0; margin-bottom: 36px;
-}
-.step-dot {
-  display: flex; align-items: center; gap: 0;
-}
-.step-dot .dot {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel', serif; font-size: 12px;
-  color: var(--text-muted);
-  transition: all 0.3s;
-  background: var(--bg2);
-}
-.step-dot.active .dot {
-  border-color: var(--gold); color: var(--gold);
-  box-shadow: 0 0 16px rgba(200,169,81,0.3);
-}
-.step-dot.done .dot {
-  border-color: var(--green); background: var(--green);
-  color: #fff;
-}
-.step-line {
-  width: 40px; height: 2px; background: var(--border);
-  margin-top: 15px; transition: background 0.3s;
-}
-.step-line.done { background: var(--green); }
-.step-label {
-  font-size: 9px; text-align: center; margin-top: 6px;
-  color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;
-  max-width: 60px;
-}
-.step-dot.active .step-label { color: var(--gold); }
-
-/* PANELS */
-.panel {
-  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 28px;
-  margin-bottom: 20px;
-  position: relative;
-  overflow: hidden;
-}
-.panel::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
-}
-.panel-title {
-  font-family: 'Cinzel', serif;
-  font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 20px;
-  display: flex; align-items: center; gap: 10px;
-}
-.panel-title::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, var(--border-gold), transparent);
-}
-
-/* FORM ELEMENTS */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px;
-}
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group.full { grid-column: 1 / -1; }
-
-label {
-  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--text-dim);
-}
-
-select, input[type="text"], input[type="number"], textarea {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  font-family: 'Crimson Text', serif;
-  font-size: 15px;
-  padding: 8px 12px;
-  width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none;
-}
-select:focus, input:focus, textarea:focus {
-  outline: none;
-  border-color: var(--gold-dark);
-  box-shadow: 0 0 0 2px rgba(200,169,81,0.1);
-}
-select option { background: #1a1520; }
-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-
-/* REP GRID */
-.rep-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-}
-.rep-item { display: flex; flex-direction: column; gap: 5px; }
-.rep-item label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
-.rep-select {
-  background: rgba(0,0,0,0.4); border: 1px solid var(--border);
-  border-radius: 4px; color: var(--text);
-  font-family: 'Crimson Text', serif; font-size: 13px;
-  padding: 6px 10px; -webkit-appearance: none;
-}
-
-/* GEAR TABLE */
-.gear-table { display: grid; gap: 6px; }
-.gear-row {
-  display: grid; grid-template-columns: 90px 1fr;
-  gap: 10px; align-items: center;
-}
-.gear-slot-label {
-  font-size: 10px; color: var(--text-dim);
-  text-transform: uppercase; letter-spacing: 1px;
-  text-align: right;
-}
-
-/* BUTTONS */
-.btn {
-  font-family: 'Cinzel', serif;
-  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
-  padding: 12px 28px;
-  border-radius: 4px; border: none; cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-primary {
-  background: linear-gradient(135deg, #c8a030, #8a6a15);
-  color: #0a0805;
-  box-shadow: 0 4px 20px rgba(200,169,81,0.25);
-}
-.btn-primary:hover {
-  box-shadow: 0 6px 28px rgba(200,169,81,0.4);
-  transform: translateY(-1px);
-}
-.btn-primary:disabled {
-  opacity: 0.5; cursor: not-allowed; transform: none;
-}
-.btn-secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-}
-.btn-secondary:hover { border-color: var(--gold-dark); color: var(--gold); }
-
-.btn-row {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 24px; flex-wrap: wrap; gap: 12px;
-}
-
-/* API KEY INPUT */
-.api-section {
-  background: rgba(200,169,81,0.05);
-  border: 1px solid rgba(200,169,81,0.2);
-  border-radius: 6px; padding: 16px; margin-bottom: 20px;
-}
-.api-note { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.5; }
-.api-note a { color: var(--gold); text-decoration: none; }
-
-/* RESULTS */
-.results-panel {
-  background: linear-gradient(135deg, #0d0b18, #120f1f);
-  border: 1px solid rgba(200,169,81,0.3);
-  border-radius: 8px; padding: 28px;
-  position: relative; overflow: hidden;
-}
-.results-panel::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-}
-
-.result-content {
-  font-size: 15px; line-height: 1.8; color: var(--text);
-  white-space: pre-wrap;
-}
-
-/* Streaming cursor */
-.cursor {
-  display: inline-block; width: 2px; height: 16px;
-  background: var(--gold); margin-left: 2px;
-  animation: blink 1s infinite; vertical-align: middle;
-}
-@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-
-/* Loading */
-.loading-ring {
-  width: 48px; height: 48px; border-radius: 50%;
-  border: 3px solid var(--border);
-  border-top-color: var(--gold);
-  animation: spin 0.8s linear infinite;
-  margin: 20px auto;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-text {
-  text-align: center; font-style: italic;
-  color: var(--text-dim); font-size: 14px; margin-top: 8px;
-}
-
-/* Formatted result sections */
-.result-section {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
-}
-.result-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.result-heading {
-  font-family: 'Cinzel', serif;
-  font-size: 13px; letter-spacing: 2px; color: var(--gold);
-  text-transform: uppercase; margin-bottom: 12px;
-}
-.priority-item {
-  display: flex; gap: 12px; align-items: flex-start;
-  margin-bottom: 8px; font-size: 15px;
-}
-.priority-num {
-  font-family: 'Cinzel', serif; font-size: 11px;
-  color: var(--gold-dark); min-width: 22px; padding-top: 2px;
-}
-
-/* Character badge */
-.char-badge {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: rgba(200,169,81,0.08);
-  border: 1px solid rgba(200,169,81,0.2);
-  border-radius: 6px; padding: 10px 16px; margin-bottom: 20px;
-}
-.char-badge-name { font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); }
-.char-badge-sub { font-size: 12px; color: var(--text-dim); }
-
-/* Progress bar for steps */
-.progress-bar {
-  height: 2px; background: var(--border);
-  border-radius: 1px; margin-bottom: 32px; overflow: hidden;
-}
-.progress-fill {
-  height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-  border-radius: 1px; transition: width 0.4s ease;
-}
-
-/* Tooltip */
-.tooltip { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
-
-/* Decorative divider */
-.divider {
-  text-align: center; color: var(--gold-dark);
-  font-size: 18px; margin: 28px 0; letter-spacing: 8px;
-}
-
-/* New analysis button */
-.new-btn {
-  display: block; margin: 24px auto 0;
-  background: transparent; border: 1px solid var(--border);
-  color: var(--text-dim); font-family: 'Cinzel', serif;
-  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-  padding: 10px 24px; border-radius: 4px; cursor: pointer;
-  transition: all 0.2s;
-}
-.new-btn:hover { border-color: var(--gold-dark); color: var(--gold); }
-
-@media (max-width: 500px) {
-  .panel { padding: 18px; }
-  .form-grid { grid-template-columns: 1fr; }
-  .gear-row { grid-template-columns: 80px 1fr; }
-  h1 { font-size: 22px; }
-  .step-line { width: 24px; }
-}
-```
-
+    :root {
+      --gold: #c8a951; --gold-light: #f0c060; --gold-dark: #8a6a20;
+      --bg: #07060d; --bg2: #0d0b18; --bg3: #120f1f;
+      --border: #2a2040; --border-gold: #3a2a10;
+      --text: #d4c9b0; --text-dim: #7a6a5a; --text-muted: #4a3a2a;
+      --green: #4a9a4a; --red: #c04040;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Crimson Text', Georgia, serif; font-size: 16px;
+      min-height: 100vh; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 20% 20%, rgba(100,60,200,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,100,30,0.05) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    .container { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; padding: 0 20px 60px; }
+    header {
+      text-align: center; padding: 48px 0 36px;
+      border-bottom: 1px solid var(--border-gold); margin-bottom: 40px; position: relative;
+    }
+    header::after {
+      content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .header-rune { font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 12px; }
+    h1 {
+      font-family: 'Cinzel', serif; font-size: clamp(24px, 5vw, 38px); font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, var(--gold-light) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: 3px; line-height: 1.2; margin-bottom: 10px;
+    }
+    .subtitle { font-size: 14px; color: var(--text-dim); letter-spacing: 1px; font-style: italic; }
+    .steps-row { display: flex; align-items: flex-start; justify-content: center; margin-bottom: 36px; }
+    .step-col { display: flex; flex-direction: column; align-items: center; }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-size: 12px; transition: all 0.3s;
+      border: 2px solid var(--border); color: var(--text-muted); background: var(--bg2);
+    }
+    .step-num.active { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 16px rgba(200,169,81,0.3); }
+    .step-num.done { border-color: var(--green); background: var(--green); color: #fff; }
+    .step-lbl { font-size: 9px; margin-top: 6px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+    .step-lbl.active { color: var(--gold); }
+    .step-lbl.done { color: var(--green); }
+    .step-line { width: 40px; height: 2px; background: var(--border); margin-top: 15px; transition: background 0.3s; }
+    .step-line.done { background: var(--green); }
+    .progress-bar { height: 2px; background: var(--border); border-radius: 1px; margin-bottom: 32px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold)); border-radius: 1px; transition: width 0.4s ease; }
+    .api-box {
+      background: rgba(200,169,81,0.05); border: 1px solid rgba(200,169,81,0.2);
+      border-radius: 6px; padding: 16px; margin-bottom: 20px;
+    }
+    .api-note { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.5; }
+    .api-note a { color: var(--gold); text-decoration: none; }
+    .panel {
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+      border: 1px solid var(--border); border-radius: 8px; padding: 28px;
+      margin-bottom: 20px; position: relative; overflow: hidden;
+    }
+    .panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+    }
+    .panel-title {
+      font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .panel-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-gold), transparent); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+    select, input[type="text"], input[type="number"], textarea {
+      background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text); font-family: 'Crimson Text', serif; font-size: 15px;
+      padding: 8px 12px; width: 100%; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none; border-color: var(--gold-dark); box-shadow: 0 0 0 2px rgba(200,169,81,0.1);
+    }
+    select option { background: #1a1520; }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+    .rep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .rep-item { display: flex; flex-direction: column; gap: 5px; }
+    .rep-item label { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+    .gear-table { display: grid; gap: 6px; }
+    .gear-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center; }
+    .gear-slot-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; text-align: right; }
+    .btn {
+      font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+      padding: 12px 28px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #c8a030, #8a6a15); color: #0a0805;
+      box-shadow: 0 4px 20px rgba(200,169,81,0.25);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(200,169,81,0.4); transform: translateY(-1px); }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+    .btn-secondary:hover { border-color: var(--gold-dark); color: var(--gold); }
+    .btn-row { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; flex-wrap: wrap; gap: 12px; }
+    .divider { text-align: center; color: var(--gold-dark); font-size: 18px; margin: 28px 0; letter-spacing: 8px; }
+    .tooltip { font-size: 11px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+    .loading-wrap { text-align: center; padding: 40px 0; }
+    .loading-ring {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 3px solid var(--border); border-top-color: var(--gold);
+      animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-style: italic; color: var(--text-dim); font-size: 14px; }
+    .error-box {
+      background: rgba(192,64,64,0.08); border: 1px solid rgba(192,64,64,0.3);
+      border-radius: 8px; padding: 28px; text-align: center; margin-bottom: 16px;
+    }
+    .error-icon { font-size: 32px; margin-bottom: 12px; }
+    .error-title {
+      font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px;
+      color: #c04040; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .error-msg { font-size: 14px; color: #9a7a7a; margin-bottom: 20px; line-height: 1.6; }
+    .error-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .results-panel {
+      background: linear-gradient(135deg, #0d0b18, #120f1f);
+      border: 1px solid rgba(200,169,81,0.3); border-radius: 8px; padding: 28px;
+      position: relative; overflow: hidden;
+    }
+    .results-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .char-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(200,169,81,0.08); border: 1px solid rgba(200,169,81,0.2);
+      border-radius: 6px; padding: 10px 16px; margin-bottom: 20px;
+    }
+    .char-badge-name { font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold); }
+    .char-badge-sub { font-size: 12px; color: var(--text-dim); }
+    .result-content { font-size: 15px; line-height: 1.8; color: var(--text); white-space: pre-wrap; }
+    .cursor {
+      display: inline-block; width: 2px; height: 16px; background: var(--gold);
+      margin-left: 2px; animation: blink 1s infinite; vertical-align: middle;
+    }
+    @keyframes blink { 0%,50% { opacity:1; } 51%,100% { opacity:0; } }
+    .new-btn {
+      display: block; margin: 24px auto 0; background: transparent;
+      border: 1px solid var(--border); color: var(--text-dim);
+      font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase; padding: 10px 24px; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+    }
+    .new-btn:hover { border-color: var(--gold-dark); color: var(--gold); }
+    @media (max-width: 500px) {
+      .panel { padding: 18px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .gear-row { grid-template-columns: 75px 1fr; }
+      h1 { font-size: 22px; }
+      .step-line { width: 24px; }
+    }
   </style>
 </head>
 <body>
-<div class="grain"></div>
-
 <div class="container">
+
   <header>
-    <div class="header-rune">⚔ TBC Classic ⚔</div>
+    <div class="header-rune">— TBC Classic —</div>
     <h1>Character Advisor</h1>
-    <p class="subtitle">AI-powered gear & progression planning for Burning Crusade</p>
+    <p class="subtitle">AI-powered gear &amp; progression planning for Burning Crusade</p>
   </header>
 
-  <!-- STEP INDICATOR -->
-
-  <div class="step-indicator" id="stepIndicator">
-    <div class="step-dot active" id="stepDot1">
-      <div class="dot">1</div>
-      <div class="step-label">Character</div>
+  <div class="steps-row" id="stepsRow">
+    <div class="step-col">
+      <div class="step-num active" id="sn1">1</div>
+      <div class="step-lbl active" id="sl1">Character</div>
     </div>
-    <div class="step-line" id="stepLine1"></div>
-    <div class="step-dot" id="stepDot2">
-      <div class="dot">2</div>
-      <div class="step-label">Gear</div>
+    <div class="step-line" id="sl1l"></div>
+    <div class="step-col">
+      <div class="step-num" id="sn2">2</div>
+      <div class="step-lbl" id="sl2">Gear</div>
     </div>
-    <div class="step-line" id="stepLine2"></div>
-    <div class="step-dot" id="stepDot3">
-      <div class="dot">3</div>
-      <div class="step-label">Progress</div>
+    <div class="step-line" id="sl2l"></div>
+    <div class="step-col">
+      <div class="step-num" id="sn3">3</div>
+      <div class="step-lbl" id="sl3">Progress</div>
     </div>
-    <div class="step-line" id="stepLine3"></div>
-    <div class="step-dot" id="stepDot4">
-      <div class="dot">4</div>
-      <div class="step-label">Analysis</div>
+    <div class="step-line" id="sl3l"></div>
+    <div class="step-col">
+      <div class="step-num" id="sn4">4</div>
+      <div class="step-lbl" id="sl4">Analysis</div>
     </div>
   </div>
 
-  <div class="progress-bar">
-    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 
-  <!-- API KEY -->
-
-  <div class="api-section" id="apiSection">
+  <div class="api-box">
     <div class="form-group">
       <label>Anthropic API Key</label>
       <input type="text" id="apiKey" placeholder="sk-ant-..." autocomplete="off" />
@@ -416,7 +212,7 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
     <p class="api-note">Your key is used only in your browser and never stored. Get one free at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> — costs fractions of a cent per analysis.</p>
   </div>
 
-  <!-- STEP 1: CHARACTER -->
+  <!-- STEP 1 -->
 
   <div id="step1" class="panel">
     <div class="panel-title">Character Info</div>
@@ -428,60 +224,32 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
       <div class="form-group">
         <label>Level</label>
         <select id="charLevel">
-          <option value="70">70</option>
-          <option value="69">69</option>
-          <option value="68">68</option>
-          <option value="67">67</option>
-          <option value="66">66</option>
-          <option value="65">65</option>
+          <option>70</option><option>69</option><option>68</option>
+          <option>67</option><option>66</option><option>65</option>
         </select>
       </div>
       <div class="form-group">
         <label>Class</label>
         <select id="charClass">
           <option value="">Select class...</option>
-          <option>Hunter</option>
-          <option>Warrior</option>
-          <option>Paladin</option>
-          <option>Priest</option>
-          <option>Druid</option>
-          <option>Shaman</option>
-          <option>Rogue</option>
-          <option>Mage</option>
-          <option>Warlock</option>
+          <option>Hunter</option><option>Warrior</option><option>Paladin</option>
+          <option>Priest</option><option>Druid</option><option>Shaman</option>
+          <option>Rogue</option><option>Mage</option><option>Warlock</option>
         </select>
       </div>
       <div class="form-group">
         <label>Spec</label>
         <select id="charSpec">
           <option value="">Select spec...</option>
-          <option>Beast Mastery</option>
-          <option>Marksmanship</option>
-          <option>Survival</option>
-          <option>Arms</option>
-          <option>Fury</option>
-          <option>Protection (Warrior)</option>
-          <option>Holy (Paladin)</option>
-          <option>Protection (Paladin)</option>
-          <option>Retribution</option>
-          <option>Discipline</option>
-          <option>Holy (Priest)</option>
-          <option>Shadow</option>
-          <option>Balance</option>
-          <option>Feral</option>
-          <option>Restoration (Druid)</option>
-          <option>Elemental</option>
-          <option>Enhancement</option>
-          <option>Restoration (Shaman)</option>
-          <option>Assassination</option>
-          <option>Combat</option>
-          <option>Subtlety</option>
-          <option>Arcane</option>
-          <option>Fire</option>
-          <option>Frost (Mage)</option>
-          <option>Affliction</option>
-          <option>Demonology</option>
-          <option>Destruction</option>
+          <option>Beast Mastery</option><option>Marksmanship</option><option>Survival</option>
+          <option>Arms</option><option>Fury</option><option>Protection (Warrior)</option>
+          <option>Holy (Paladin)</option><option>Protection (Paladin)</option><option>Retribution</option>
+          <option>Discipline</option><option>Holy (Priest)</option><option>Shadow</option>
+          <option>Balance</option><option>Feral</option><option>Restoration (Druid)</option>
+          <option>Elemental</option><option>Enhancement</option><option>Restoration (Shaman)</option>
+          <option>Assassination</option><option>Combat</option><option>Subtlety</option>
+          <option>Arcane</option><option>Fire</option><option>Frost</option>
+          <option>Affliction</option><option>Demonology</option><option>Destruction</option>
         </select>
       </div>
       <div class="form-group">
@@ -489,32 +257,25 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
         <select id="charRace">
           <option value="">Select race...</option>
           <optgroup label="Alliance">
-            <option>Human</option>
-            <option>Night Elf</option>
-            <option>Dwarf</option>
-            <option>Gnome</option>
-            <option>Draenei</option>
+            <option>Human</option><option>Night Elf</option><option>Dwarf</option>
+            <option>Gnome</option><option>Draenei</option>
           </optgroup>
           <optgroup label="Horde">
-            <option>Orc</option>
-            <option>Troll</option>
-            <option>Tauren</option>
-            <option>Undead</option>
-            <option>Blood Elf</option>
+            <option>Orc</option><option>Troll</option><option>Tauren</option>
+            <option>Undead</option><option>Blood Elf</option>
           </optgroup>
         </select>
       </div>
       <div class="form-group">
         <label>Faction</label>
         <select id="charFaction">
-          <option value="Alliance">Alliance</option>
-          <option value="Horde">Horde</option>
+          <option>Alliance</option><option>Horde</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Current Phase Content</label>
+        <label>Current Phase</label>
         <select id="charPhase">
-          <option value="pre-raid">Pre-Raid (dungeons only)</option>
+          <option value="pre-raid">Pre-Raid</option>
           <option value="p1">Phase 1 (Kara/Gruul/Mag)</option>
           <option value="p2" selected>Phase 2 (SSC/TK)</option>
           <option value="p3">Phase 3 (BT/Hyjal)</option>
@@ -533,418 +294,311 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
         <input type="text" id="prof2" placeholder="e.g. Engineering 364" />
       </div>
       <div class="form-group full">
-        <label>Special Notes (playstyle, goals, constraints)</label>
-        <textarea id="charNotes" placeholder="e.g. Planning to melee weave, have Axesmith spec, want to do Kara this week, have a group of 3 available..."></textarea>
+        <label>Special Notes</label>
+        <textarea id="charNotes" placeholder="e.g. Planning to melee weave, have Axesmith spec, want to do Kara this week..."></textarea>
         <div class="tooltip">The more detail you give, the more tailored your recommendations will be.</div>
       </div>
     </div>
     <div class="btn-row">
       <span></span>
-      <button class="btn btn-primary" onclick="goToStep(2)">Next: Gear →</button>
+      <button class="btn btn-primary" onclick="goToStep(2)">Next: Gear &rarr;</button>
     </div>
   </div>
 
-  <!-- STEP 2: GEAR -->
+  <!-- STEP 2 -->
 
   <div id="step2" class="panel" style="display:none">
     <div class="panel-title">Current Gear</div>
-    <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px; font-style:italic;">Enter your current item in each slot. Leave blank if slot is empty or using vendor gear.</p>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;font-style:italic;">Enter your current item in each slot. Leave blank if empty.</p>
     <div class="gear-table" id="gearTable"></div>
     <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
-      <button class="btn btn-primary" onclick="goToStep(3)">Next: Progress →</button>
+      <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Next: Progress &rarr;</button>
     </div>
   </div>
 
-  <!-- STEP 3: REP + ATTUNEMENT -->
+  <!-- STEP 3 -->
 
   <div id="step3" class="panel" style="display:none">
-    <div class="panel-title">Reputation & Progress</div>
-
-```
-<div style="font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px;">Outland Reputations</div>
-<div class="rep-grid" id="repGrid"></div>
-
-<div class="divider">· · ·</div>
-
-<div style="font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">Attunements & Keys</div>
-<div class="form-grid">
-  <div class="form-group">
-    <label>Kara Attuned?</label>
-    <select id="attKara">
-      <option value="no">No</option>
-      <option value="in-progress">In Progress</option>
-      <option value="yes">Yes</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Epic Flying Mount?</label>
-    <select id="attFlying">
-      <option value="no">No</option>
-      <option value="normal">Normal Flying Only</option>
-      <option value="yes">Yes — Epic Flying</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Heroic Keys (select all)</label>
-    <select id="attKeys" multiple style="height:100px; font-size:13px;">
-      <option>Flamewrought Key</option>
-      <option>Reservoir Key</option>
-      <option>Auchenai Key</option>
-      <option>Warpforged Key</option>
-      <option>Key of Time</option>
-    </select>
-    <div class="tooltip">Hold Ctrl/Cmd to select multiple</div>
-  </div>
-  <div class="form-group">
-    <label>Current BoJ Count</label>
-    <input type="number" id="bojCount" placeholder="e.g. 12" min="0" />
-  </div>
-</div>
-
-<div class="btn-row">
-  <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
-  <button class="btn btn-primary" id="analyzeBtn" onclick="runAnalysis()">⚔ Analyze Character</button>
-</div>
-```
-
+    <div class="panel-title">Reputation &amp; Progress</div>
+    <div style="font-size:11px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Outland Reputations</div>
+    <div class="rep-grid" id="repGrid"></div>
+    <div class="divider">&middot; &middot; &middot;</div>
+    <div style="font-size:11px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Attunements &amp; Keys</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Kara Attuned?</label>
+        <select id="attKara">
+          <option value="no">No</option>
+          <option value="in-progress">In Progress</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Epic Flying Mount?</label>
+        <select id="attFlying">
+          <option value="no">No</option>
+          <option value="normal">Normal Flying Only</option>
+          <option value="yes">Yes - Epic Flying</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Heroic Keys (hold Ctrl to select multiple)</label>
+        <select id="attKeys" multiple style="height:110px;font-size:13px;">
+          <option>Flamewrought Key</option>
+          <option>Reservoir Key</option>
+          <option>Auchenai Key</option>
+          <option>Warpforged Key</option>
+          <option>Key of Time</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Badges of Justice</label>
+        <input type="number" id="bojCount" placeholder="e.g. 12" min="0" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="runAnalysis()">Analyze Character</button>
+    </div>
   </div>
 
-  <!-- STEP 4: RESULTS -->
+  <!-- STEP 4 -->
 
   <div id="step4" style="display:none">
-    <div id="loadingDiv" style="text-align:center; padding:40px 0; display:none;">
+    <div id="loadingWrap" class="loading-wrap" style="display:none">
       <div class="loading-ring"></div>
       <p class="loading-text">Consulting the oracle...</p>
     </div>
-
-```
-<div id="errorPanel" style="display:none; background:rgba(192,64,64,0.08); border:1px solid rgba(192,64,64,0.3); border-radius:8px; padding:24px; text-align:center; margin-bottom:16px;">
-  <div style="font-size:28px; margin-bottom:12px;">WARNING</div>
-  <div style="font-family:Cinzel,serif; font-size:13px; letter-spacing:2px; color:#c04040; margin-bottom:10px; text-transform:uppercase;">Analysis Failed</div>
-  <div id="errorMessage" style="font-size:14px; color:#9a7a7a; margin-bottom:20px; line-height:1.6; white-space:pre-wrap;"></div>
-  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-    <button class="btn btn-primary" onclick="retryAnalysis()" style="font-size:11px; padding:10px 20px;">Try Again</button>
-    <button class="btn btn-secondary" onclick="goToStep(3)" style="font-size:11px; padding:10px 20px;">Back to Edit</button>
+    <div id="errorBox" class="error-box" style="display:none">
+      <div class="error-icon">&#9888;</div>
+      <div class="error-title">Analysis Failed</div>
+      <div id="errorMsg" class="error-msg"></div>
+      <div class="error-btns">
+        <button class="btn btn-primary" onclick="retryAnalysis()" style="font-size:11px;padding:10px 20px;">&#8635; Try Again</button>
+        <button class="btn btn-secondary" onclick="goToStep(3)" style="font-size:11px;padding:10px 20px;">&larr; Edit Details</button>
+      </div>
+    </div>
+    <div id="resultsPanel" class="results-panel" style="display:none">
+      <div id="charBadge" class="char-badge"></div>
+      <div id="resultContent" class="result-content"></div>
+    </div>
+    <button class="new-btn" id="newCharBtn" onclick="startOver()" style="display:none">&#8635; Analyze Another Character</button>
   </div>
+
 </div>
-
-<div class="results-panel" id="resultsPanel" style="display:none">
-  <div id="charBadge" class="char-badge"></div>
-  <div id="resultContent" class="result-content"></div>
-</div>
-
-<button class="new-btn" id="newCharBtn" onclick="startOver()" style="display:none">Analyze Another Character</button>
-```
-
-  </div>
-</div>
-
 <script>
-const GEAR_SLOTS = [
+var GEAR_SLOTS = [
   "Head","Neck","Shoulders","Back","Chest","Wrist",
   "Hands","Waist","Legs","Feet","Ring 1","Ring 2",
   "Trinket 1","Trinket 2","Main Hand / 2H Weapon","Off Hand","Ranged","Ammo Pouch/Quiver"
 ];
-
-const REPS = [
-  "Honor Hold / Thrallmar",
-  "Cenarion Expedition",
-  "Lower City",
-  "The Aldor / The Scryers",
-  "The Sha'tar",
-  "Keepers of Time",
-  "The Consortium",
-  "Kurenai / The Mag'har",
-  "Sporeggar",
-  "Ogri'la",
+var REPS = [
+  "Honor Hold / Thrallmar","Cenarion Expedition","Lower City",
+  "The Aldor / The Scryers","The Sha'tar","Keepers of Time",
+  "The Consortium","Kurenai / The Mag'har","Sporeggar","Ogri'la"
 ];
+var REP_STANDINGS = ["None","Hated","Hostile","Unfriendly","Neutral","Friendly","Honored","Revered","Exalted"];
+var streamingText = "";
+var lastData = null;
 
-const REP_STANDINGS = ["None","Hated","Hostile","Unfriendly","Neutral","Friendly","Honored","Revered","Exalted"];
-
-let currentStep = 1;
-let streamingText = "";
-
-// Build gear table
 function buildGearTable() {
-  const table = document.getElementById('gearTable');
-  table.innerHTML = '';
-  GEAR_SLOTS.forEach(slot => {
-    const row = document.createElement('div');
-    row.className = 'gear-row';
-    row.innerHTML = `
-      <div class="gear-slot-label">${slot}</div>
-      <input type="text" class="gear-input" data-slot="${slot}" placeholder="Item name or leave blank" />
-    `;
-    table.appendChild(row);
-  });
+var t = document.getElementById(‘gearTable’); t.innerHTML = ‘’;
+GEAR_SLOTS.forEach(function(s) {
+var row = document.createElement(‘div’); row.className = ‘gear-row’;
+var lbl = document.createElement(‘div’); lbl.className = ‘gear-slot-label’; lbl.textContent = s;
+var inp = document.createElement(‘input’); inp.type = ‘text’; inp.className = ‘gear-input’;
+inp.dataset.slot = s; inp.placeholder = ‘Item name or leave blank’;
+row.appendChild(lbl); row.appendChild(inp); t.appendChild(row);
+});
 }
 
-// Build rep grid
 function buildRepGrid() {
-  const grid = document.getElementById('repGrid');
-  grid.innerHTML = '';
-  REPS.forEach(rep => {
-    const item = document.createElement('div');
-    item.className = 'rep-item';
-    item.innerHTML = `
-      <label>${rep}</label>
-      <select class="rep-select" data-rep="${rep}">
-        ${REP_STANDINGS.map(s => `<option value="${s}" ${s==='Friendly'?'selected':''}>${s}</option>`).join('')}
-      </select>
-    `;
-    grid.appendChild(item);
-  });
+var g = document.getElementById(‘repGrid’); g.innerHTML = ‘’;
+REPS.forEach(function(r) {
+var item = document.createElement(‘div’); item.className = ‘rep-item’;
+var lbl = document.createElement(‘label’); lbl.textContent = r;
+var sel = document.createElement(‘select’); sel.className = ‘rep-select’; sel.dataset.rep = r;
+REP_STANDINGS.forEach(function(s) {
+var o = document.createElement(‘option’); o.value = s; o.textContent = s;
+if (s === ‘Friendly’) o.selected = true; sel.appendChild(o);
+});
+item.appendChild(lbl); item.appendChild(sel); g.appendChild(item);
+});
 }
 
-buildGearTable();
-buildRepGrid();
+buildGearTable(); buildRepGrid();
+
+function setStep(step) {
+for (var s = 1; s <= 4; s++) {
+var sn = document.getElementById(‘sn’ + s);
+var sl = document.getElementById(‘sl’ + s);
+if (!sn) continue;
+if (s < step) {
+sn.style.borderColor = ‘#4a9a4a’; sn.style.background = ‘#4a9a4a’; sn.style.color = ‘#fff’; sn.style.boxShadow = ‘none’;
+sl.style.color = ‘#4a9a4a’;
+} else if (s === step) {
+sn.style.borderColor = ‘#c8a951’; sn.style.background = ‘#0d0b18’; sn.style.color = ‘#c8a951’; sn.style.boxShadow = ‘0 0 16px rgba(200,169,81,0.3)’;
+sl.style.color = ‘#c8a951’;
+} else {
+sn.style.borderColor = ‘#2a2040’; sn.style.background = ‘#0d0b18’; sn.style.color = ‘#4a3a2a’; sn.style.boxShadow = ‘none’;
+sl.style.color = ‘#4a3a2a’;
+}
+if (s < 4) {
+var line = document.getElementById(‘sl’ + s + ‘l’);
+if (line) line.style.background = s < step ? ‘#4a9a4a’ : ‘#2a2040’;
+}
+}
+document.getElementById(‘progressFill’).style.width = (((step - 1) / 3) * 100) + ‘%’;
+}
 
 function goToStep(step) {
-  // Validate step 1
-  if (step > 1) {
-    if (!document.getElementById('charClass').value) {
-      alert('Please select your class before continuing.');
-      return;
-    }
-  }
-
-  currentStep = step;
-  [1,2,3,4].forEach(s => {
-    const el = document.getElementById(`step${s}`);
-    if (el) el.style.display = s === step ? 'block' : 'none';
-  });
-
-  document.getElementById('step4').style.display = step === 4 ? 'block' : 'none';
-
-  // Update step indicators
-  [1,2,3,4].forEach(s => {
-    const dot = document.getElementById(`stepDot${s}`);
-    dot.className = 'step-dot' + (s < step ? ' done' : s === step ? ' active' : '');
-    if (s < 4) {
-      const line = document.getElementById(`stepLine${s}`);
-      line.className = 'step-line' + (s < step ? ' done' : '');
-    }
-  });
-
-  // Update progress
-  const pct = ((step - 1) / 3) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+if (step > 1 && !document.getElementById(‘charClass’).value) {
+alert(‘Please select your class before continuing.’); return;
+}
+for (var s = 1; s <= 3; s++) {
+var el = document.getElementById(‘step’ + s);
+if (el) el.style.display = (s === step) ? ‘block’ : ‘none’;
+}
+document.getElementById(‘step4’).style.display = step === 4 ? ‘block’ : ‘none’;
+setStep(step);
+window.scrollTo({ top: 0, behavior: ‘smooth’ });
 }
 
 function collectData() {
-  const gear = {};
-  document.querySelectorAll('.gear-input').forEach(el => {
-    if (el.value.trim()) gear[el.dataset.slot] = el.value.trim();
-  });
-
-  const reps = {};
-  document.querySelectorAll('.rep-select').forEach(el => {
-    reps[el.dataset.rep] = el.value;
-  });
-
-  const keys = Array.from(document.getElementById('attKeys').selectedOptions).map(o => o.value);
-
-  return {
-    name: document.getElementById('charName').value || 'Unknown',
-    level: document.getElementById('charLevel').value,
-    charClass: document.getElementById('charClass').value,
-    spec: document.getElementById('charSpec').value,
-    race: document.getElementById('charRace').value,
-    faction: document.getElementById('charFaction').value,
-    phase: document.getElementById('charPhase').value,
-    gold: document.getElementById('charGold').value,
-    prof1: document.getElementById('prof1').value,
-    prof2: document.getElementById('prof2').value,
-    notes: document.getElementById('charNotes').value,
-    gear,
-    reps,
-    attunements: {
-      kara: document.getElementById('attKara').value,
-      flying: document.getElementById('attFlying').value,
-      keys,
-      boj: document.getElementById('bojCount').value || '0',
-    }
-  };
+var gear = {};
+document.querySelectorAll(’.gear-input’).forEach(function(el) {
+if (el.value.trim()) gear[el.dataset.slot] = el.value.trim();
+});
+var reps = {};
+document.querySelectorAll(’.rep-select’).forEach(function(el) { reps[el.dataset.rep] = el.value; });
+var keys = Array.from(document.getElementById(‘attKeys’).selectedOptions).map(function(o) { return o.value; });
+return {
+name: document.getElementById(‘charName’).value || ‘Unknown’,
+level: document.getElementById(‘charLevel’).value,
+charClass: document.getElementById(‘charClass’).value,
+spec: document.getElementById(‘charSpec’).value,
+race: document.getElementById(‘charRace’).value,
+faction: document.getElementById(‘charFaction’).value,
+phase: document.getElementById(‘charPhase’).value,
+gold: document.getElementById(‘charGold’).value,
+prof1: document.getElementById(‘prof1’).value,
+prof2: document.getElementById(‘prof2’).value,
+notes: document.getElementById(‘charNotes’).value,
+gear: gear, reps: reps,
+attunements: {
+kara: document.getElementById(‘attKara’).value,
+flying: document.getElementById(‘attFlying’).value,
+keys: keys, boj: document.getElementById(‘bojCount’).value || ‘0’
+}
+};
 }
 
-function buildPrompt(data) {
-  const gearStr = Object.entries(data.gear).length > 0
-    ? Object.entries(data.gear).map(([slot, item]) => `  ${slot}: ${item}`).join('\n')
-    : '  (No gear provided)';
-
-  const repStr = Object.entries(data.reps).map(([rep, standing]) => `  ${rep}: ${standing}`).join('\n');
-
-  return `You are an expert World of Warcraft: The Burning Crusade Classic advisor. Analyze this character and provide specific, actionable recommendations.
-
-CHARACTER:
-- Name: ${data.name}
-- Level ${data.level} ${data.race} ${data.spec} ${data.charClass}
-- Faction: ${data.faction}
-- Phase: ${data.phase}
-- Gold: ${data.gold || 'unknown'}g
-- Profession 1: ${data.prof1 || 'unknown'}
-- Profession 2: ${data.prof2 || 'unknown'}
-- Notes: ${data.notes || 'none'}
-
-CURRENT GEAR:
-${gearStr}
-
-REPUTATION STANDINGS:
-${repStr}
-
-ATTUNEMENTS & KEYS:
-- Kara Attuned: ${data.attunements.kara}
-- Epic Flying: ${data.attunements.flying}
-- Heroic Keys: ${data.attunements.keys.length > 0 ? data.attunements.keys.join(', ') : 'none'}
-- Badges of Justice: ${data.attunements.boj}
-
-Please provide a detailed analysis with these sections:
-
-1. CHARACTER ASSESSMENT
-Brief overview of where this character stands, what phase content they can access, and their biggest strengths/weaknesses right now.
-
-2. IMMEDIATE PRIORITIES (Top 5)
-The 5 most impactful things they should do RIGHT NOW, numbered and specific. Consider their gold, attunements, keys, and phase.
-
-3. GEAR UPGRADE PATH
-Slot-by-slot analysis of their most important gear upgrades. Focus on the highest-impact slots first. Include exact item names and where to get them. Flag any set bonuses worth maintaining.
-
-4. REPUTATION ROADMAP
-Which reps they need to prioritize and why, based on their class/spec and current standings.
-
-5. THIS WEEK'S SESSION PLAN
-A practical 2-3 session plan they can execute this week. Be specific about which dungeons, quests, or activities to do each session.
-
-6. ONE THING MOST PLAYERS MISS
-A class/spec-specific tip, utility item, or optimization that most players overlook for their exact spec.
-
-Be direct, specific, and practical. Use exact item names. Avoid generic advice. Tailor everything to their exact spec, race, faction, and current progress.`;
+function buildPrompt(d) {
+var gearStr = Object.keys(d.gear).length > 0
+? Object.keys(d.gear).map(function(s) { return ’  ’ + s + ‘: ’ + d.gear[s]; }).join(’\n’)
+: ’  (No gear provided)’;
+var repStr = Object.keys(d.reps).map(function(r) { return ’  ’ + r + ‘: ’ + d.reps[r]; }).join(’\n’);
+return ‘You are an expert World of Warcraft: The Burning Crusade Classic advisor. Analyze this character and provide specific, actionable recommendations.\n\n’ +
+’CHARACTER:\n- Name: ’ + d.name + ’\n- Level ’ + d.level + ’ ’ + d.race + ’ ’ + d.spec + ’ ’ + d.charClass + ‘\n’ +
+’- Faction: ’ + d.faction + ’\n- Phase: ’ + d.phase + ’\n- Gold: ’ + (d.gold || ‘unknown’) + ‘g\n’ +
+’- Profession 1: ’ + (d.prof1 || ‘unknown’) + ’\n- Profession 2: ’ + (d.prof2 || ‘unknown’) + ‘\n’ +
+’- Notes: ’ + (d.notes || ‘none’) + ‘\n\nCURRENT GEAR:\n’ + gearStr + ‘\n\nREPUTATION STANDINGS:\n’ + repStr + ‘\n\n’ +
+’ATTUNEMENTS & KEYS:\n- Kara Attuned: ’ + d.attunements.kara + ’\n- Epic Flying: ’ + d.attunements.flying + ‘\n’ +
+‘- Heroic Keys: ’ + (d.attunements.keys.length > 0 ? d.attunements.keys.join(’, ’) : ‘none’) + ‘\n’ +
+’- Badges of Justice: ’ + d.attunements.boj + ‘\n\n’ +
+‘Please provide a detailed analysis with these sections:\n\n’ +
+‘1. CHARACTER ASSESSMENT\nBrief overview of where this character stands, what content they can access, and their biggest strengths/weaknesses.\n\n’ +
+‘2. IMMEDIATE PRIORITIES (Top 5)\nThe 5 most impactful things they should do RIGHT NOW. Numbered, specific, considers their gold/attunements/keys/phase.\n\n’ +
+‘3. GEAR UPGRADE PATH\nSlot-by-slot analysis of most important upgrades. Highest-impact slots first. Exact item names and sources. Flag set bonuses.\n\n’ +
+‘4. REPUTATION ROADMAP\nWhich reps to prioritize and why, based on class/spec and current standings.\n\n’ +
+‘5. THIS WEEK'S SESSION PLAN\nPractical 2-3 session plan for this week. Specific dungeons, quests, or activities per session.\n\n’ +
+‘6. ONE THING MOST PLAYERS MISS\nA class/spec-specific tip, utility item, or optimization most players overlook.\n\n’ +
+‘Be direct, specific, practical. Use exact item names. No generic advice. Tailor everything to their exact spec, race, faction, and progress.’;
 }
-
 
 async function runAnalysis() {
-  const apiKey = document.getElementById('apiKey').value.trim();
-  if (!apiKey || !apiKey.startsWith('sk-ant-')) {
-    alert('Please enter a valid Anthropic API key (starts with sk-ant-)');
-    return;
-  }
-
-  const data = collectData();
-  goToStep(4);
-
-  document.getElementById('loadingDiv').style.display = 'block';
-  document.getElementById('resultsPanel').style.display = 'none';
-  document.getElementById('errorPanel').style.display = 'none';
-  document.getElementById('newCharBtn').style.display = 'none';
-
-  // Set character badge
-  document.getElementById('charBadge').innerHTML =
-    '<div><div class="char-badge-name">' + data.name + '</div>' +
-    '<div class="char-badge-sub">Level ' + data.level + ' ' + data.race + ' ' + data.spec + ' ' + data.charClass + ' · ' + data.faction + '</div></div>';
-
-  const resultDiv = document.getElementById('resultContent');
-  resultDiv.textContent = '';
-  streamingText = '';
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2000,
-        stream: true,
-        messages: [{ role: 'user', content: buildPrompt(data) }]
-      })
-    });
-
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error?.message || 'API request failed');
-    }
-
-    document.getElementById('loadingDiv').style.display = 'none';
-    document.getElementById('resultsPanel').style.display = 'block';
-    document.getElementById('newCharBtn').style.display = 'block';
-
-    const cursor = document.createElement('span');
-    cursor.className = 'cursor';
-    resultDiv.appendChild(cursor);
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
-
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          const d = line.slice(6);
-          if (d === '[DONE]') continue;
-          try {
-            const parsed = JSON.parse(d);
-            if (parsed.type === 'content_block_delta' && parsed.delta && parsed.delta.text) {
-              streamingText += parsed.delta.text;
-              resultDiv.textContent = streamingText;
-              resultDiv.appendChild(cursor);
-              resultDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-          } catch(e) {}
-        }
-      }
-    }
-
-    cursor.remove();
-
-  } catch (err) {
-    document.getElementById('loadingDiv').style.display = 'none';
-    document.getElementById('resultsPanel').style.display = 'none';
-    document.getElementById('errorPanel').style.display = 'block';
-    document.getElementById('newCharBtn').style.display = 'none';
-    document.getElementById('errorMessage').textContent =
-      err.message + '\n\nMake sure your API key is correct and has credits at console.anthropic.com';
-  }
+var apiKey = document.getElementById(‘apiKey’).value.trim();
+if (!apiKey || !apiKey.startsWith(‘sk-ant-’)) {
+alert(‘Please enter a valid Anthropic API key (starts with sk-ant-)’); return;
+}
+lastData = collectData();
+goToStep(4);
+document.getElementById(‘loadingWrap’).style.display = ‘block’;
+document.getElementById(‘resultsPanel’).style.display = ‘none’;
+document.getElementById(‘errorBox’).style.display = ‘none’;
+document.getElementById(‘newCharBtn’).style.display = ‘none’;
+document.getElementById(‘charBadge’).innerHTML =
+‘<div><div class="char-badge-name">’ + lastData.name + ‘</div>’ +
+‘<div class="char-badge-sub">Level ’ + lastData.level + ’ ’ + lastData.race + ’ ’ + lastData.spec + ’ ’ + lastData.charClass + ’ · ’ + lastData.faction + ‘</div></div>’;
+var resultDiv = document.getElementById(‘resultContent’);
+resultDiv.textContent = ‘’; streamingText = ‘’;
+try {
+var resp = await fetch(‘https://api.anthropic.com/v1/messages’, {
+method: ‘POST’,
+headers: {
+‘Content-Type’: ‘application/json’,
+‘x-api-key’: apiKey,
+‘anthropic-version’: ‘2023-06-01’,
+‘anthropic-dangerous-direct-browser-access’: ‘true’
+},
+body: JSON.stringify({
+model: ‘claude-haiku-4-5-20251001’,
+max_tokens: 2000, stream: true,
+messages: [{ role: ‘user’, content: buildPrompt(lastData) }]
+})
+});
+if (!resp.ok) { var e = await resp.json(); throw new Error(e.error && e.error.message ? e.error.message : ‘API request failed’); }
+document.getElementById(‘loadingWrap’).style.display = ‘none’;
+document.getElementById(‘resultsPanel’).style.display = ‘block’;
+document.getElementById(‘newCharBtn’).style.display = ‘block’;
+var cursor = document.createElement(‘span’); cursor.className = ‘cursor’; resultDiv.appendChild(cursor);
+var reader = resp.body.getReader(); var decoder = new TextDecoder();
+while (true) {
+var res = await reader.read(); if (res.done) break;
+var lines = decoder.decode(res.value).split(’\n’);
+for (var i = 0; i < lines.length; i++) {
+if (!lines[i].startsWith(’data: ’)) continue;
+var d = lines[i].slice(6); if (d === ‘[DONE]’) continue;
+try {
+var p = JSON.parse(d);
+if (p.type === ‘content_block_delta’ && p.delta && p.delta.text) {
+streamingText += p.delta.text;
+resultDiv.textContent = streamingText; resultDiv.appendChild(cursor);
+resultDiv.scrollIntoView({ behavior: ‘smooth’, block: ‘end’ });
+}
+} catch(ex) {}
+}
+}
+cursor.remove();
+} catch(err) {
+document.getElementById(‘loadingWrap’).style.display = ‘none’;
+document.getElementById(‘resultsPanel’).style.display = ‘none’;
+document.getElementById(‘errorBox’).style.display = ‘block’;
+document.getElementById(‘newCharBtn’).style.display = ‘none’;
+document.getElementById(‘errorMsg’).textContent = err.message + ‘\n\nCheck your API key and credits at console.anthropic.com’;
+}
 }
 
-function retryAnalysis() {
-  document.getElementById('errorPanel').style.display = 'none';
-  runAnalysis();
-}
+function retryAnalysis() { document.getElementById(‘errorBox’).style.display = ‘none’; runAnalysis(); }
 
 function startOver() {
-  document.getElementById('charName').value = '';
-  document.getElementById('charLevel').value = '70';
-  document.getElementById('charClass').value = '';
-  document.getElementById('charSpec').value = '';
-  document.getElementById('charRace').value = '';
-  document.getElementById('charFaction').value = 'Alliance';
-  document.getElementById('charPhase').value = 'p2';
-  document.getElementById('charGold').value = '';
-  document.getElementById('prof1').value = '';
-  document.getElementById('prof2').value = '';
-  document.getElementById('charNotes').value = '';
-  document.getElementById('bojCount').value = '';
-  document.getElementById('attKara').value = 'no';
-  document.getElementById('attFlying').value = 'no';
-  document.getElementById('resultContent').textContent = '';
-  document.getElementById('errorPanel').style.display = 'none';
-  document.getElementById('resultsPanel').style.display = 'none';
-  document.getElementById('newCharBtn').style.display = 'none';
-  buildGearTable();
-  buildRepGrid();
-  goToStep(1);
+[‘charName’,‘charGold’,‘prof1’,‘prof2’,‘charNotes’,‘bojCount’].forEach(function(id) {
+var el = document.getElementById(id); if (el) el.value = ‘’;
+});
+document.getElementById(‘charLevel’).value = ‘70’;
+document.getElementById(‘charClass’).value = ‘’;
+document.getElementById(‘charSpec’).value = ‘’;
+document.getElementById(‘charRace’).value = ‘’;
+document.getElementById(‘charFaction’).value = ‘Alliance’;
+document.getElementById(‘charPhase’).value = ‘p2’;
+document.getElementById(‘attKara’).value = ‘no’;
+document.getElementById(‘attFlying’).value = ‘no’;
+document.getElementById(‘resultContent’).textContent = ‘’;
+document.getElementById(‘errorBox’).style.display = ‘none’;
+document.getElementById(‘resultsPanel’).style.display = ‘none’;
+document.getElementById(‘newCharBtn’).style.display = ‘none’;
+buildGearTable(); buildRepGrid(); goToStep(1);
 }
 </script>
 
